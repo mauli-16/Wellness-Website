@@ -42,11 +42,16 @@ const userCtrl={
         const token=jwt.sign({id:user._id},'anykey',{expiresIn:"30d"})
         //send response
         res.json({
-            message:"login success"
+            message:"login success",
+            id:user._id,
+            token
+
         })
     }),
     profile:asyncHandler(async (req,res)=>{
-        const user=await User.findById().select("-password")
+        const user=await User.findById(req.user).select("-password")
+        res.json({user})
     }),
+    
 }
 module.exports=userCtrl

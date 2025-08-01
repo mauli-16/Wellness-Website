@@ -3,6 +3,7 @@ const app=express()
 const mongoose=require('mongoose')
 const dotenv=require('dotenv')
 const router = require('./routes/users')
+const errorHandler = require('./middlewares/errorHandler')
 dotenv.config()
 const port=5000
 
@@ -14,6 +15,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 
 //middleware
 app.use(express.json())
+app.use(errorHandler)
 //routes
 app.use("/",router)
 
