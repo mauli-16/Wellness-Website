@@ -1,0 +1,17 @@
+const express=require('express')
+const app=express()
+const mongoose=require('mongoose')
+const dotenv=require('dotenv')
+dotenv.config()
+const port=5000
+
+//connect to mongodb
+mongoose.connect(process.env.MONGO_URL).then(()=>{
+    console.log('DB connected');
+    
+}).catch((e)=>console.log('Error message:',e));
+
+app.listen(port,()=>{
+    console.log(`server is running`);
+    
+})
