@@ -1,5 +1,8 @@
 const asyncHandler = require("express-async-handler");
 const Session = require("../models/Session");
+const fs = require("fs");
+const path = require("path");
+
 const sessionCtrl = {
   sessions: asyncHandler(async (req, res) => {
     const sessions = await Session.find();
@@ -12,8 +15,8 @@ const sessionCtrl = {
   }),
   userSessions: asyncHandler(async (req, res) => {
     req.user._id;
-    const sessions = await Session.findById({ user: req.user._id });
-    if (!sessions.length) {
+    const sessions = await Session.find({ user: req.user._id });
+    if (!sessions || sessions.length === 0) {
       res.status(404);
       throw new Error("No sessions found for this user.");
     }
@@ -35,17 +38,23 @@ const sessionCtrl = {
     res.json(session);
   }),
   publishSession: asyncHandler(async (req, res) => {
-    const { title, tags, json_file_url, sessionId } = req.body;
+    const { title, tags, sessionDetails, sessionId } = req.body;
 
-    if (!title || !tags || !json_file_url) {
+    if (!title || !tags || !sessionDetails) {
       res.status(400);
-      throw new Error("Title, tags, and file URL are required.");
+      throw new Error("Title, tags, and session details are required.");
     }
+
+    // Save JSON to file locally
+    const fileName = `session_${Date.now()}.json`;
+    const filePath = path.join(__dirname, "..", "uploads", "json", fileName);
+    fs.writeFileSync(filePath, JSON.stringify(sessionDetails, null, 2));
+
+    const fileUrl = `/uploads/json/${fileName}`; // Serve statically via Express
 
     let session;
 
     if (sessionId) {
-      // Try updating existing draft session to published
       session = await Session.findOne({
         _id: sessionId,
         user: req.user._id,
@@ -54,19 +63,18 @@ const sessionCtrl = {
       if (session) {
         session.title = title;
         session.tags = tags;
-        session.json_file_url = json_file_url;
+        session.json_file_url = fileUrl;
         session.status = "published";
         await session.save();
       }
     }
 
-    // If no draft found or no sessionId, create new published session
     if (!session) {
       session = await Session.create({
         user: req.user._id,
         title,
         tags,
-        json_file_url,
+        json_file_url: fileUrl,
         status: "published",
       });
     }
@@ -112,3 +120,4 @@ const sessionCtrl = {
     });
   }),
 };
+module.exports = sessionCtrl;
