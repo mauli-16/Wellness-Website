@@ -4,6 +4,7 @@ const mongoose=require('mongoose')
 const dotenv=require('dotenv')
 const router = require('./routes/users')
 const errorHandler = require('./middlewares/errorHandler')
+const cookieParser=require('cookie-parser')
 dotenv.config()
 const port=5000
 
@@ -16,6 +17,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 //middleware
 app.use(express.json())
 app.use(errorHandler)
+app.use(cookieParser())
 //routes
 app.use("/",router)
 
