@@ -1,10 +1,21 @@
-import { Box, Heading, IconButton, SimpleGrid, Text, Image, HStack, Button } from '@chakra-ui/react';
-import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from '@chakra-ui/icons';
-import { useState } from 'react';
-import AddSession from './AddSession';
+import {
+  Box,
+  Heading,
+  IconButton,
+  SimpleGrid,
+  Text,
+  Image,
+  HStack,
+  Button,
+} from "@chakra-ui/react";
+import { ChevronLeftIcon, ChevronRightIcon, StarIcon } from "@chakra-ui/icons";
+import { useState } from "react";
+import AddSession from "./AddSession";
+import axios from "axios";
+import { useEffect } from "react";
 
 type Course = {
-  id: number;
+  _id: number;
   title: string;
   description: string;
   image: string;
@@ -12,66 +23,65 @@ type Course = {
   reviews: number;
 };
 
-const courseData: Course[] = [
+const courseData = [
   {
     id: 1,
-    title: 'Restorative Yoga Training & Immersion',
+    title: "Restorative Yoga Training & Immersion",
     description:
-      'In Online Restorative Yoga Teacher Training and Immersion, you will learn all the methodology for...',
-    image: '/images/yoga1.jpg',
+      "In Online Restorative Yoga Teacher Training and Immersion, you will learn all the methodology for...",
+    image: "/images/yoga1.jpg",
     rating: 4,
     reviews: 18,
   },
   {
     id: 2,
-    title: 'Effective Yin Yoga for Beginners',
+    title: "Effective Yin Yoga for Beginners",
     description:
-      'You will learn about ethics, lifestyle, mythology, asanas, body anatomy, basic meditation and pranayama.',
-    image: '/images/yoga2.jpg',
+      "You will learn about ethics, lifestyle, mythology, asanas, body anatomy, basic meditation and pranayama.",
+    image: "/images/yoga2.jpg",
     rating: 5,
     reviews: 24,
   },
   {
     id: 3,
-    title: '200-Hour Ashtanga Vinyasa Yoga Training',
+    title: "200-Hour Ashtanga Vinyasa Yoga Training",
     description:
-      'The goal of this course is to achieve a deeper holistic understanding of Vinyasa Yoga and gain the skills ...',
-    image: '/images/yoga3.jpg',
+      "The goal of this course is to achieve a deeper holistic understanding of Vinyasa Yoga and gain the skills ...",
+    image: "/images/yoga3.jpg",
     rating: 4,
     reviews: 13,
   },
   {
     id: 4,
-    title: 'Beginner’s Power Yoga Challenge',
-    description: 'Strengthen your body and enhance flexibility with a 30-day power yoga challenge...',
-    image: '/images/yoga4.jpg',
+    title: "Beginner’s Power Yoga Challenge",
+    description:
+      "Strengthen your body and enhance flexibility with a 30-day power yoga challenge...",
+    image: "/images/yoga4.jpg",
     rating: 4,
     reviews: 16,
   },
   {
     id: 5,
-    title: 'Prenatal Yoga Foundation',
-    description: 'Learn safe and beneficial yoga practices during pregnancy for body and mind.',
-    image: '/images/yoga5.jpg',
+    title: "Prenatal Yoga Foundation",
+    description:
+      "Learn safe and beneficial yoga practices during pregnancy for body and mind.",
+    image: "/images/yoga5.jpg",
     rating: 5,
     reviews: 21,
   },
   {
     id: 6,
-    title: 'Yoga for Stress Relief & Sleep',
-    description: 'This course helps calm your mind and body, especially suited for better sleep.',
-    image: '/images/yoga6.jpg',
+    title: "Yoga for Stress Relief & Sleep",
+    description:
+      "This course helps calm your mind and body, especially suited for better sleep.",
+    image: "/images/yoga6.jpg",
     rating: 5,
     reviews: 30,
   },
   // Add more courses if needed
 ];
 
-const CourseCard = ({
-  course,
-}: {
-  course: Course;
-}) => (
+const CourseCard = ({ course }: { course: Course }) => (
   <Box
     borderWidth="1px"
     borderRadius="lg"
@@ -98,9 +108,12 @@ const CourseCard = ({
     </Box>
     <HStack mt={3}>
       {Array(5)
-        .fill('')
+        .fill("")
         .map((_, i) => (
-          <StarIcon key={i} color={i < course.rating ? 'yellow.400' : 'gray.300'} />
+          <StarIcon
+            key={i}
+            color={i < course.rating ? "yellow.400" : "gray.300"}
+          />
         ))}
       <Text fontSize="sm" color="gray.500">
         ({course.reviews})
@@ -110,8 +123,21 @@ const CourseCard = ({
 );
 
 export const PopularCourses = () => {
+  const [publicSessions, setPublicSessions] = useState<Course[]>([]);
+  useEffect(() => {
+    const fetchSessions = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/sessions");
+        setPublicSessions(res.data);
+      } catch (error) {
+        console.error("Error fetching sessions:", error);
+      }
+    };
+
+    fetchSessions();
+  }, []);
   const [startIndex, setStartIndex] = useState(0);
-  const visibleCourses = courseData.slice(startIndex, startIndex + 3);
+  const visibleCourses = publicSessions.slice(startIndex, startIndex + 3);
 
   const handlePrev = () => {
     setStartIndex((prev) => Math.max(prev - 3, 0));
@@ -144,7 +170,7 @@ export const PopularCourses = () => {
       </HStack>
       <SimpleGrid columns={[1, 2, 3]} spacing={6}>
         {visibleCourses.map((course) => (
-          <CourseCard key={course.id} course={course} />
+          <CourseCard key={course._id} course={course} />
         ))}
       </SimpleGrid>
       <Box textAlign="center" mt={6}>
@@ -152,7 +178,7 @@ export const PopularCourses = () => {
           View More
         </Button>
       </Box>
-      <AddSession/>
+      <AddSession />
     </Box>
   );
 };
