@@ -38,11 +38,20 @@ const sessionCtrl = {
     res.json(session);
   }),
   publishSession: asyncHandler(async (req, res) => {
+    
+    console.log("Inside publishSession");
+    console.log("Request body:", req.body);
+    console.log("User:", req.user);
+
     const { title, tags, sessionDetails, sessionId } = req.body;
 
     if (!title || !tags || !sessionDetails) {
       res.status(400);
       throw new Error("Title, tags, and session details are required.");
+    }
+        const uploadsDir = path.join(__dirname, "..", "uploads", "json");
+    if (!fs.existsSync(uploadsDir)) {
+      fs.mkdirSync(uploadsDir, { recursive: true });
     }
 
     // Save JSON to file locally

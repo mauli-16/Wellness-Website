@@ -15,7 +15,7 @@ const isAuthenticated = async (req, res, next) => {
     const decoded = jwt.verify(token, 'anykey');
 
     
-    req.user = decoded.id;
+      req.user = { _id: decoded.id };
 
     console.log('Verified user ID from cookie:', req.user);
     next();
