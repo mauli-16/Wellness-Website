@@ -12,8 +12,10 @@ import { Link} from "react-router-dom";
 import { FiLogIn } from "react-icons/fi";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate=useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -39,7 +41,7 @@ const Login = () => {
         isClosable: true,
       });
 
-      //navigate("/chat");
+      navigate("/sessions");
     } catch (error: any) {
       toast({
         title: "Login failed",

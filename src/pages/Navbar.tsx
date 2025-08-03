@@ -1,10 +1,20 @@
 import { Box, Flex, HStack, Text, Button, Spacer } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
+
 const Navbar = () => {
   const navigate = useNavigate();
+
+  const menuItems = [
+    { label: "Home", route: "/" },
+    { label: "Sessions", route: "/sessions" },
+    // { label: "Blog", route: "/blog" },
+    // { label: "Expertise", route: "/expertise" },
+  ];
+
   const handleSignInClick = () => {
     navigate("/user/login");
   };
+
   return (
     <Box px={6} py={4} boxShadow="sm">
       <Flex align="center">
@@ -16,21 +26,22 @@ const Navbar = () => {
         {/* Spacer to center menu items */}
         <Spacer />
 
-        {/* Menu Items with hover */}
+        {/* Menu Items with hover and navigation */}
         <HStack spacing={8} fontSize="md" color="gray.600">
-          {["Home", "Courses", "Blog", "Expertise"].map((item, index) => (
+          {menuItems.map((item, index) => (
             <Text
               key={index}
-              fontWeight={item === "Home" ? "bold" : "medium"}
-              color={item === "Home" ? "black" : "gray.600"}
+              fontWeight={item.label === "Home" ? "bold" : "medium"}
+              color={item.label === "Home" ? "black" : "gray.600"}
               cursor="pointer"
               transition="all 0.2s ease"
               _hover={{
                 color: "teal.500",
                 transform: "translateY(-2px)",
               }}
+              onClick={() => navigate(item.route)}
             >
-              {item}
+              {item.label}
             </Text>
           ))}
         </HStack>

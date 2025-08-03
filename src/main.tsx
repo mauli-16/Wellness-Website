@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
 import Dashboard from "./pages/dashboard.tsx";
+import {PopularCourses }from "./pages/Session.tsx"
 
 
 createRoot(document.getElementById("root")!).render(
@@ -17,6 +18,8 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/user/login" element={<Login />} />
           <Route path="/user/register" element={<Register />} />
           <Route path="/" element={<Dashboard />} />
+          <Route path="/sessions" element={<PopularCourses />} />
+          
         
           
         </Routes>
