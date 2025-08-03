@@ -173,7 +173,7 @@ const Register = () => {
             <Text color="gray.600" _dark={{ color: "gray.300" }} pt={4}>
               Already have an account?{" "}
               <Link
-                to="/"
+                to="/user/login"
                 style={{
                   color: "var(--chakra-colors-brand-500)",
                   fontWeight: 500,

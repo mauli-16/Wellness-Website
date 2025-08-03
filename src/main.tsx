@@ -5,15 +5,18 @@ import theme from "./theme.tsx";
 import "./index.css";
 import App from "./App.tsx";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Login from "./pages/login.tsx";
+import Login from "./pages/Login.tsx";
 import Register from "./pages/Register.tsx";
+import Dashboard from "./pages/dashboard.tsx";
+
 
 createRoot(document.getElementById("root")!).render(
   <ChakraProvider theme={theme}>
         <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/user/login" element={<Login />} />
           <Route path="/user/register" element={<Register />} />
+          <Route path="/" element={<Dashboard />} />
         
           
         </Routes>
