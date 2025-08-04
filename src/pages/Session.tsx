@@ -13,6 +13,9 @@ import { useState } from "react";
 import AddSession from "./AddSession";
 import axios from "axios";
 import { useEffect } from "react";
+import UserSession from "./UserSession";
+import { Navigate, useNavigate } from "react-router-dom";
+
 
 type Course = {
   _id: number;
@@ -123,6 +126,7 @@ const CourseCard = ({ course }: { course: Course }) => (
 );
 
 export const PopularCourses = () => {
+  const navigate=useNavigate()
   const [publicSessions, setPublicSessions] = useState<Course[]>([]);
   useEffect(() => {
     const fetchSessions = async () => {
@@ -179,6 +183,10 @@ export const PopularCourses = () => {
         </Button>
       </Box>
       <AddSession />
+      <Button onClick={()=>navigate('/userSession')} colorScheme="teal" borderRadius="full">
+              See user sessions
+      </Button>
+      
     </Box>
   );
 };
