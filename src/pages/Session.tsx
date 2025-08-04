@@ -13,8 +13,8 @@ import { useState } from "react";
 import AddSession from "./AddSession";
 import axios from "axios";
 import { useEffect } from "react";
-import UserSession from "./UserSession";
-import { Navigate, useNavigate } from "react-router-dom";
+
+import {  useNavigate } from "react-router-dom";
 
 
 type Course = {
