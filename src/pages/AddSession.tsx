@@ -22,39 +22,38 @@ const AddSession = () => {
 
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
-  const [jsonUrl, setJsonUrl] = useState("");
+
   const [sessionId, setSessionId] = useState<string | null>(null);
+  const [description, setDescription] = useState("");
+  const [duration, setDuration] = useState("");
+  const [difficulty, setDifficulty] = useState("");
 
   const handleSaveDraft = async () => {
-   
-    if (!title || !tags || !jsonUrl) {
+    if (!title || !tags || !description || !duration || !difficulty) {
       alert("Please fill all the fields.");
       return;
     }
 
     try {
-      const response = await fetch(jsonUrl);
-
-      if (!response.ok) {
-        throw new Error("Unable to fetch JSON. Please check the URL.");
-      }
-
-      const sessionDetails = await response.json();
+      const sessionDetails = {
+        description,
+        duration,
+        difficulty,
+      };
 
       const payload = {
         title,
         tags: tags.split(",").map((tag) => tag.trim()),
-        json_file_url: jsonUrl,
+        sessionDetails,
         sessionId: null,
       };
 
       const res = await axios.post(
         "http://localhost:5000/sessions/saveDraft",
         payload,
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
+
       if (res.data.session && res.data.session._id) {
         setSessionId(res.data.session._id);
       }
@@ -70,46 +69,62 @@ const AddSession = () => {
     }
   };
 
-  const handlePublish = async () => {
-    if (!title || !tags || !jsonUrl) {
-      alert("Please fill all the fields.");
-      return;
-    }
+ const handlePublish = async () => {
+  if (!title || !tags || !description || !duration || !difficulty) {
+    alert("Please fill all the fields.");
+    return;
+  }
 
-    try {
-      const response = await fetch(jsonUrl);
-
-      if (!response.ok) {
-        throw new Error("Unable to fetch JSON. Please check the URL.");
-      }
-
-      const sessionDetails = await response.json();
-
-      const payload = {
-        title,
-        tags: tags.split(",").map((tag) => tag.trim()), // convert to array
-        jsonUrl,
-        sessionDetails,
-      };
-
-      const res = await axios.post(
-        "http://localhost:5000/sessions/publish",
-        payload,
-        {
-          withCredentials: true,
-        }
-      );
-
-      alert(res.data.message || "Session published!");
-    } catch (error: any) {
-      console.error("Publish error:", error);
-      alert(
-        error?.response?.data?.message ||
-          error?.message ||
-          "Failed to publish session"
-      );
-    }
+  const sessionDetails = {
+    description,
+    duration,
+    difficulty,
   };
+
+  // Step 1: Upload JSON file
+  const jsonBlob = new Blob([JSON.stringify(sessionDetails)], {
+    type: "application/json",
+  });
+
+  const formData = new FormData();
+  formData.append("file", jsonBlob, `${title.replace(/\s+/g, "_")}.json`);
+
+  try {
+    const uploadRes = await axios.post(
+      "http://localhost:5000/sessions/uploadJson",
+      formData,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      }
+    );
+
+    const jsonUrl = uploadRes.data.url;
+
+    // Step 2: Publish session using uploaded JSON URL
+    const payload = {
+      title,
+      tags: tags.split(",").map((tag) => tag.trim()),
+      jsonUrl,
+    };
+
+    const res = await axios.post(
+      "http://localhost:5000/sessions/publish",
+      payload,
+      { withCredentials: true }
+    );
+
+    alert(res.data.message || "Session published!");
+  } catch (error: any) {
+    console.error("Publish error:", error);
+    alert(
+      error?.response?.data?.message ||
+        error?.message ||
+        "Failed to publish session"
+    );
+  }
+};
+
 
   return (
     <Box>
@@ -143,11 +158,30 @@ const AddSession = () => {
               </FormControl>
 
               <FormControl>
-                <FormLabel>JSON File URL</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <Input
-                  placeholder="Enter JSON file URL"
-                  value={jsonUrl}
-                  onChange={(e) => setJsonUrl(e.target.value)}
+                  placeholder="Enter session description"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Duration (in minutes)</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="30"
+                  value={duration}
+                  onChange={(e) => setDuration(e.target.value)}
+                />
+              </FormControl>
+
+              <FormControl>
+                <FormLabel>Difficulty</FormLabel>
+                <Input
+                  placeholder="Beginner / Intermediate / Advanced"
+                  value={difficulty}
+                  onChange={(e) => setDifficulty(e.target.value)}
                 />
               </FormControl>
             </VStack>

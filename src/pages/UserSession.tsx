@@ -13,9 +13,12 @@ import {
   Center,
   HStack
 } from '@chakra-ui/react';
+import IndividualSession from './IndividualSession';
+import { useNavigate } from 'react-router-dom';
 
 interface Session {
     _id: string;
+    user:string
     title?: string;
     tag?: string;
     json_file_url?: string;
@@ -24,6 +27,7 @@ interface Session {
 }
 
 const UserSession = () => {
+    const navigate=useNavigate()
     const [userSession, setUserSession] = useState<Session[]>([])
     const [loading, setLoading] = useState(true);
 
@@ -77,7 +81,8 @@ const UserSession = () => {
                             _active={{
                                 transform: 'translateY(-2px)',
                                 shadow: 'md'
-                            }}>
+                            }}
+                            onClick={()=>navigate(`/sessions/${session._id}`)}>
                             <CardBody>
                                 <VStack align="start" spacing={3}>
                                     <Heading size="md">{session.title}</Heading>

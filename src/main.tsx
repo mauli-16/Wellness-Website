@@ -10,6 +10,7 @@ import Register from "./pages/Register.tsx";
 import Dashboard from "./pages/Dashboard.tsx";
 import {PopularCourses }from "./pages/Session.tsx"
 import UserSession from "./pages/UserSession.tsx";
+import IndividualSession from "./pages/IndividualSession.tsx";
 
 
 createRoot(document.getElementById("root")!).render(
@@ -21,6 +22,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/" element={<Dashboard />} />
           <Route path="/sessions" element={<PopularCourses />} />
           <Route path="/userSession" element={<UserSession />} />
+          <Route path="sessions/:id" element={<IndividualSession />} />
           
         
           
