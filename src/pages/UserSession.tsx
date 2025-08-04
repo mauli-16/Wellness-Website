@@ -13,7 +13,7 @@ import {
   Center,
   HStack
 } from '@chakra-ui/react';
-import IndividualSession from './IndividualSession';
+
 import { useNavigate } from 'react-router-dom';
 
 interface Session {

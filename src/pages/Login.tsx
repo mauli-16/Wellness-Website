@@ -26,7 +26,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(
+       await axios.post(
         "http://localhost:5000/user/login",
         {
           email,
