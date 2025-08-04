@@ -23,7 +23,7 @@ const AddSession = () => {
   const [title, setTitle] = useState("");
   const [tags, setTags] = useState("");
 
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  //const [sessionId, setSessionId] = useState<string | null>(null);
   const [description, setDescription] = useState("");
   const [duration, setDuration] = useState("");
   const [difficulty, setDifficulty] = useState("");
@@ -45,7 +45,7 @@ const AddSession = () => {
         title,
         tags: tags.split(",").map((tag) => tag.trim()),
         sessionDetails,
-        sessionId: null,
+        //sessionId: null,
       };
 
       const res = await axios.post(
@@ -55,7 +55,7 @@ const AddSession = () => {
       );
 
       if (res.data.session && res.data.session._id) {
-        setSessionId(res.data.session._id);
+        //setSessionId(res.data.session._id);
       }
 
       alert(res.data.message || "Session saved as draft!");
