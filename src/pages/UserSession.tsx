@@ -33,7 +33,7 @@ const UserSession = () => {
 
     const fetchSession = async () => {
         try {
-            const res = await axios.get("http://localhost:5000/sessions/userSessions", {
+            const res = await axios.get("https://wellness-website.onrender.com/sessions/userSessions", {
                 withCredentials: true
             })
             setUserSession(res.data)

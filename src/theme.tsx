@@ -9,7 +9,7 @@ const theme = extendTheme({
       200: "#99cbc3",
       300: "#66b2a5",
       400: "#339987",
-      500: "#007f6a",  // Primary calming green
+      500: "#007f6a",  
       600: "#006655",
       700: "#004d40",
       800: "#00332b",
@@ -27,7 +27,7 @@ const theme = extendTheme({
   styles: {
     global: (props: Record<string, any>) => ({
       body: {
-        bg: mode("#f7fafc", "#1A202C")(props),  // Light/Dark mode backgrounds
+        bg: mode("#f7fafc", "#1A202C")(props),  
         color: mode("gray.800", "gray.100")(props),
         lineHeight: "base",
       },

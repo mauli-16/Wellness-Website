@@ -26,7 +26,7 @@ const Register = () => {
 
     try {
       await axios.post(
-        "http://localhost:5000/user/register",
+        "https://wellness-website.onrender.com/user/register",
         { username, email, password },
         { withCredentials: true }
       );

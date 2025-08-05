@@ -27,7 +27,7 @@ const Login = () => {
     setLoading(true);
     try {
        await axios.post(
-        "http://localhost:5000/user/login",
+        "https://wellness-website.onrender.com/user/login",
         {
           email,
           password,

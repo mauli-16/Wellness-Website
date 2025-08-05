@@ -49,7 +49,7 @@ const AddSession = () => {
       };
 
       const res = await axios.post(
-        "http://localhost:5000/sessions/saveDraft",
+        "https://wellness-website.onrender.com/sessions/saveDraft",
         payload,
         { withCredentials: true }
       );
@@ -91,7 +91,7 @@ const AddSession = () => {
 
   try {
     const uploadRes = await axios.post(
-      "http://localhost:5000/sessions/uploadJson",
+      "https://wellness-website.onrender.com/sessions/uploadJson",
       formData,
       {
         headers: { "Content-Type": "multipart/form-data" },
@@ -109,7 +109,7 @@ const AddSession = () => {
     };
 
     const res = await axios.post(
-      "http://localhost:5000/sessions/publish",
+      "https://wellness-website.onrender.com/sessions/publish",
       payload,
       { withCredentials: true }
     );

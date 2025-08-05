@@ -131,7 +131,7 @@ export const PopularCourses = () => {
   useEffect(() => {
     const fetchSessions = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/sessions");
+        const res = await axios.get("https://wellness-website.onrender.com/sessions");
         setPublicSessions(res.data);
       } catch (error) {
         console.error("Error fetching sessions:", error);

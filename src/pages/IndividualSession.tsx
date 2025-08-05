@@ -34,7 +34,7 @@ const IndividualSession = () => {
     const fetchSession = async () => {
         
         try {
-            const res = await axios.get(`http://localhost:5000/sessions/${id}`, {
+            const res = await axios.get(`https://wellness-website.onrender.com/sessions/${id}`, {
                 withCredentials: true
             })
             console.log('clicked');
