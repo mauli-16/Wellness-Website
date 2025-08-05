@@ -18,7 +18,7 @@ mongoose.connect(process.env.MONGO_URL).then(()=>{
 }).catch((e)=>console.log('Error message:',e));
 
 app.use(cors({
-    origin: "http://localhost:5173", 
+    origin: "https://wellness-website-sepia.vercel.app", 
     credentials: true
 }));
 
